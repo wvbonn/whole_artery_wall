@@ -1,3 +1,4 @@
+% added a test comment for Git
 % test continuous functions for permeabilities and microvascular exchanges
 
 clear
