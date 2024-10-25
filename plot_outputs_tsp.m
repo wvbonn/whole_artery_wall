@@ -1,34 +1,37 @@
-% radial model, plot profiles of variables across the tissue
+% plot max gradient magnitude and DC-CCL19 sensitivity distance
 
 clear 
 close all
 
+currdir = pwd;
+k = strfind(currdir,'\');
+homepath = currdir(1:k(end));
+
 ATHERO = 1==1;
-EXPORT = 1==0;
-homepath = 'C:\Users\Willy\Work\PhD\ATLO\clean\';
+EXPORT = 1==1;
 labels = get_subplot_labels('a':'z',8);
 
-param = declare_fixed_parameters_1D(ATHERO);
+param = declare_fixed_parameters(ATHERO);
 if ATHERO
     % load numbers from the other config to get axis limits
-    load('output_1D_healthy_tsp.mat','Pe','Da_vv','Da_lv','varpar');
-    Pe_2 = Pe; Da_vv_2 = Da_vv; Da_lv_2 = Da_lv; 
+    load('output_healthy_tsp.mat','Pe','Da_v','Da_l','varpar');
+    Pe_2 = Pe; Da_v_2 = Da_v; Da_l_2 = Da_l; 
     for i = 1:numel(varpar); R_d_2(i) = varpar(i).R_d; end
-    load('output_1D_athero_tsp.mat','Pe','Da_vv','Da_lv','varpar','max_dc','max_dc_id','t_dc_ccl');
+    load('output_athero_tsp.mat','Pe','Da_v','Da_l','varpar','max_dc','max_dc_id','t_dc_ccl');
 else
     % load numbers from the other config to get axis limits
-    load('output_1D_athero_tsp.mat','Pe','Da_vv','Da_lv','varpar');
-    Pe_2 = Pe; Da_vv_2 = Da_vv; Da_lv_2 = Da_lv; 
+    load('output_athero_tsp.mat','Pe','Da_v','Da_l','varpar');
+    Pe_2 = Pe; Da_v_2 = Da_v; Da_l_2 = Da_l; 
     for i = 1:numel(varpar); R_d_2(i) = varpar(i).R_d; end
-    load('output_1D_healthy_tsp.mat','Pe','Da_vv','Da_lv','varpar','max_dc','max_dc_id','t_dc_ccl');
+    load('output_healthy_tsp.mat','Pe','Da_v','Da_l','varpar','max_dc','max_dc_id','t_dc_ccl');
 end
 N = size(max_dc,1);
 for i = 1:N; R_d(i) = varpar(i).R_d; end
 n_D = size(max_dc,2);
 
 xlims.Pe = [0.99*min([Pe Pe_2],[],'all') 1.01*max([Pe Pe_2],[],'all')];
-xlims.Da_vv = [0.99*min([Da_vv Da_vv_2],[],'all') 1.01*max([Da_vv Da_vv_2],[],'all')];
-xlims.Da_lv = [0.99*min([Da_lv Da_lv_2],[],'all') 1.01*max([Da_lv Da_lv_2],[],'all')];
+xlims.Da_v = [0.99*min([Da_v Da_v_2],[],'all') 1.01*max([Da_v Da_v_2],[],'all')];
+xlims.Da_l = [0.99*min([Da_l Da_l_2],[],'all') 1.01*max([Da_l Da_l_2],[],'all')];
 ylims.dc = [0 13];
 y_ticks = 0:2:10;
 ylims.t_dC = [-0.4 1.2];
@@ -87,14 +90,14 @@ for i = 1:n_D
 end
 
 % vasa-vasorum Damköhler
-ax_vv = nexttile([7 1]);hold all;
+ax_v = nexttile([7 1]);hold all;
 set(gca,'fontsize',14,'TickLabelInterpreter','latex');
 text(-0.15,1,labels{2},'Units','normalized','FontSize',13,'fontweight','bold','FontName','times');
-xlabel('${\rm Da}_{\rm vv}$','Interpreter','latex');
+xlabel('${\rm Da}_v$','Interpreter','latex');
 ylabel('${\rm max} ||\nabla C|| ({\rm mm}^{-1})$','Interpreter','latex');
 ylim(ylims.dc)
 set(gca,'XScale','log');
-xl = xlims.Da_vv; xlim(xl);
+xl = xlims.Da_v; xlim(xl);
 xl_int = [ceil(log10(xl(1))) floor(log10(xl(end)))];
 x_ticks = [];
 for i = xl_int(1):xl_int(2)
@@ -107,19 +110,19 @@ text(xl(1)+0.01*log10(diff(xl)),12,'diffusion','fontsize',13,'interpreter','late
 text(xl(1)+0.5*log10(diff(xl)),12,'dilution by fluid from v.v.','fontsize',13,'interpreter','latex');
 line([1 1],ylims.dc,'color','k','linew',1);
 for i = 1:n_D
-    scatter(Da_vv(:,i),max_dc(:,i),sz,col(i,:),mkr{i});
-    scatter(Da_vv(max_dc_id(:,i)~=1,i),max_dc(max_dc_id(:,i)~=1,i),1/3*sz,'k','filled');
+    scatter(Da_v(:,i),max_dc(:,i),sz,col(i,:),mkr{i});
+    scatter(Da_v(max_dc_id(:,i)~=1,i),max_dc(max_dc_id(:,i)~=1,i),1/3*sz,'k','filled');
 end
 
 % lymphatic Damköhler
-ax_lv = nexttile([7 1]);hold all;
+ax_l = nexttile([7 1]);hold all;
 set(gca,'fontsize',14,'TickLabelInterpreter','latex');
 text(-0.15,1,labels{3},'Units','normalized','FontSize',13,'fontweight','bold','FontName','times');
-xlabel('${\rm Da}_{\rm lv}$','Interpreter','latex');
+xlabel('${\rm Da}_{\ell}$','Interpreter','latex');
 ylabel('${\rm max} ||\nabla C|| ({\rm mm}^{-1})$','Interpreter','latex');
 ylim(ylims.dc)
 set(gca,'XScale','log');
-xl = xlims.Da_lv; xlim(xl);
+xl = xlims.Da_l; xlim(xl);
 xl_int = [ceil(log10(xl(1))) floor(log10(xl(end)))];
 x_ticks = [];
 for i = xl_int(1):xl_int(2)
@@ -132,8 +135,8 @@ text(xl(1)+0.01*log10(diff(xl)),12,'diffusion','fontsize',13,'interpreter','late
 text(xl(1)+log10(diff(xl)),12,'convection into l.v.','fontsize',13,'interpreter','latex');
 line([1 1],ylims.dc,'color','k','linew',1);
 for i = 1:n_D
-    scatter(Da_lv(:,i),max_dc(:,i),sz,col(i,:),mkr{i});
-    scatter(Da_lv(max_dc_id(:,i)~=1,i),max_dc(max_dc_id(:,i)~=1,i),1/3*sz,'k','filled');
+    scatter(Da_l(:,i),max_dc(:,i),sz,col(i,:),mkr{i});
+    scatter(Da_l(max_dc_id(:,i)~=1,i),max_dc(max_dc_id(:,i)~=1,i),1/3*sz,'k','filled');
 end
 
 
@@ -165,8 +168,8 @@ for i = 1:n_D
     scatter(ax(i),R_d(max_dc_id(:,i)~=1),max_dc(max_dc_id(:,i)~=1,i),1/3*sz,'k','filled');
 end
 
-ax_vv.XLim = xlims.Da_vv;
-ax_lv.XLim = xlims.Da_lv;
+ax_v.XLim = xlims.Da_v;
+ax_l.XLim = xlims.Da_l;
 
 if EXPORT
     if ATHERO
@@ -176,7 +179,7 @@ if EXPORT
     end
 end
 
-return;
+
 
 %% plot dc-ccl19 sensitivity threshold distances
 
@@ -222,15 +225,15 @@ for i = 1:n_D
 end
 
 
-ax_vv = nexttile([7 1]);hold all;
+ax_v = nexttile([7 1]);hold all;
 set(gca,'fontsize',14,'TickLabelInterpreter','latex');
 text(-0.15,1,labels{2},'Units','normalized','FontSize',13,'fontweight','bold','FontName','times');
-xlabel('${\rm Da}_{\rm vv}$','Interpreter','latex');
+xlabel('${\rm Da}_v$','Interpreter','latex');
 ylabel('$t^*_{\rm DC,PVAT}$','Interpreter','latex');
-pos = get(ax_vv,'position');
+pos = get(ax_v,'position');
 ylim(ylims.t_dC);
 set(gca,'XScale','log');
-xl = xlims.Da_vv; xlim(xl);
+xl = xlims.Da_v; xlim(xl);
 line(xl,[0 0],'color','k','lines','--','linew',1.5);
 annotation('textbox',[pos(1) pos(2)+0.14*pos(4) pos(3) pos(4)],'String','adventitia','FontSize',14,'FontName','times',...
     'EdgeColor','none','VerticalAlignment','bottom','horizontalalignment','left','FitBoxToText','on');
@@ -247,19 +250,19 @@ text(xl(1)+0.01*log10(diff(xl)),1.1,'diffusion','fontsize',13,'interpreter','lat
 text(xl(1)+0.5*log10(diff(xl)),1.1,'dilution by fluid from v.v.','fontsize',13,'interpreter','latex');
 line([1 1],ylims.t_dC,'color','k','linew',1);
 for i = 1:n_D
-    scatter(Da_vv(:,i),t_dc_ccl(:,i),sz,col(i,:),mkr{i});
+    scatter(Da_v(:,i),t_dc_ccl(:,i),sz,col(i,:),mkr{i});
 end
 
 
-ax_lv = nexttile([7 1]);hold all;
+ax_l = nexttile([7 1]);hold all;
 set(gca,'fontsize',14,'TickLabelInterpreter','latex');
 text(-0.15,1,labels{3},'Units','normalized','FontSize',13,'fontweight','bold','FontName','times');
-xlabel('${\rm Da}_{\rm lv}$','Interpreter','latex');
+xlabel('${\rm Da}_{\ell}$','Interpreter','latex');
 ylabel('$t^*_{\rm DC,PVAT}$','Interpreter','latex');
-pos = get(ax_lv,'position');
+pos = get(ax_l,'position');
 ylim(ylims.t_dC);
 set(gca,'XScale','log');
-xl = xlims.Da_lv; xlim(xl);
+xl = xlims.Da_l; xlim(xl);
 line(xl,[0 0],'color','k','lines','--','linew',1.5);
 annotation('textbox',[pos(1) pos(2)+0.14*pos(4) pos(3) pos(4)],'String','adventitia','FontSize',14,'FontName','times',...
     'EdgeColor','none','VerticalAlignment','bottom','horizontalalignment','left','FitBoxToText','on');
@@ -276,7 +279,7 @@ text(xl(1)+0.01*log10(diff(xl)),1.1,'diffusion','fontsize',13,'interpreter','lat
 text(xl(1)+log10(diff(xl)),1.1,'convection into l.v.','fontsize',13,'interpreter','latex');
 line([1 1],ylims.t_dC,'color','k','linew',1);
 for i = 1:n_D
-    scatter(Da_lv(:,i),t_dc_ccl(:,i),sz,col(i,:),mkr{i});
+    scatter(Da_l(:,i),t_dc_ccl(:,i),sz,col(i,:),mkr{i});
 end
 
 ax0 = nexttile([7 1]);hold all;
@@ -313,8 +316,8 @@ annotation('textbox',[pos(1) pos(2)+0.14*pos(4) pos(3) pos(4)],'String','adventi
 annotation('textbox',[pos(1) pos(2)+0.25*pos(4) pos(3) pos(4)],'String','PVAT','FontSize',14,'FontName','times',...
     'EdgeColor','none','VerticalAlignment','bottom','horizontalalignment','left','FitBoxToText','on');
 
-ax_vv.XLim = xlims.Da_vv;
-ax_lv.XLim = xlims.Da_lv;
+ax_v.XLim = xlims.Da_v;
+ax_l.XLim = xlims.Da_l;
 
 if EXPORT
     if ATHERO

@@ -1,6 +1,6 @@
-function [p_ma,p_apv] = get_interface_pressures(p,r,param)
+function [p_ia,p_ap] = get_interface_pressures(p,r,param)
     
-    p_ma = p(find(r>=param.r_eel,1));
-    p_apv = p(find(r>=param.r_eel+param.t_a,1));
+    p_ia = p(find(r>=param.r_ia,1));
+    p_ap = p(find(r>=param.r_ia+param.t_a,1));
 
 end

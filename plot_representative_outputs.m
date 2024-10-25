@@ -1,9 +1,11 @@
-% schematics explaining the point outputs
 
 clear
 close all
 
-homepath = 'C:\Users\Willy\Work\PhD\ATLO\clean\';
+currdir = pwd;
+k = strfind(currdir,'\');
+homepath = currdir(1:k(end));
+
 EXPORT= 1==1;
 
 param = declare_fixed_parameters_1D(1==0);
@@ -60,11 +62,11 @@ ylabel({'velocity *'},'Interpreter','latex')
 yticks([])
 xlabel('r','Interpreter','latex')
 xticks([r_eel_norm r_apv_norm])
-xticklabels({'m-a';'a-pv'})
+xticklabels({'$r_{ia}$';'$r_{ap}$'})
 text(-0.15,1,labels{1},'Units','normalized','FontSize',13,'fontweight','bold','FontName','times');
 plot(r_norm,v_norm,'linew',1.5,'color',0.5*[1 1 1]);
 fill([r_norm(1) r_norm(id_eel) r_norm(id_eel) r_norm(1)],[v_norm(id_eel) v_norm(id_eel) v_norm(1) v_norm(1)],'k','facealpha',0,'edgecolor','k','linew',1.5);
-text(r_norm(id_eel)+0.02,0.5*(v_norm(1)+v_norm(id_eel))+0.01,'average: $\bar{v}_{\rm im}$','interpreter','latex','fontsize',15);
+text(r_norm(id_eel)+0.02,0.5*(v_norm(1)+v_norm(id_eel))+0.01,'average: $\bar{u}_{\rm im}$','interpreter','latex','fontsize',15);
 
 nexttile;hold on;
 xlim([0 1])
@@ -74,15 +76,15 @@ ylabel({'pressure *'},'Interpreter','latex')
 yticks([])
 xlabel('r','Interpreter','latex')
 xticks([r_eel_norm r_apv_norm])
-xticklabels({'m-a';'a-pv'})
+xticklabels({'$r_{ia}$';'$r_{ap}$'})
 text(-0.15,1,labels{2},'Units','normalized','FontSize',13,'fontweight','bold','FontName','times');
 plot(r_norm,p_norm,'linew',1.5,'color',0.5*[1 1 1]);
 line([r_norm(1) r_norm(id_eel)],[p_norm(id_eel) p_norm(id_eel)],'lines','--','color','k');
 scatter(r_norm(id_eel),p_norm(id_eel),30,'k','filled');
-text(r_norm(id_eel),p_norm(id_eel)+0.1,'$p_{\rm ma}$','Interpreter','latex','FontSize',15);
+text(r_norm(id_eel),p_norm(id_eel)+0.1,'$p_{ia}$','Interpreter','latex','FontSize',15);
 line([r_norm(1) r_norm(id_apv)],[p_norm(id_apv) p_norm(id_apv)],'lines','--','color','k');
 scatter(r_norm(id_apv),p_norm(id_apv),30,'k','filled');
-text(r_norm(id_apv),p_norm(id_apv)+0.1,'$p_{\rm apv}$','Interpreter','latex','FontSize',15);
+text(r_norm(id_apv),p_norm(id_apv)+0.1,'$p_{ap}$','Interpreter','latex','FontSize',15);
 
 nexttile;hold on;
 xlim([0 1.1])
@@ -92,16 +94,16 @@ ylabel({'microvascular fluxes *'},'Interpreter','latex')
 yticks([])
 xlabel('r','Interpreter','latex')
 xticks([r_eel_norm r_apv_norm])
-xticklabels({'m-a';'a-pv'})
+xticklabels({'$r_{ia}$';'$r_{ap}$'})
 text(-0.15,1,labels{3},'Units','normalized','FontSize',13,'fontweight','bold','FontName','times');
 fill([r_peri fliplr(r_peri)],[min(Q_vv_norm)*ones(1,numel(r_peri)) fliplr(Q_vv_norm)],[1 0 0],'FaceAlpha',0.25,'linew',1.5,'edgecolor',[1 0 0]);
 fill([r_peri fliplr(r_peri)],[min(Q_vv_norm)*ones(1,numel(r_peri)) fliplr(Q_lv_norm)],[0 1 0],'FaceAlpha',0.25,'linew',1.5,'edgecolor',[0 1 0]);
 plot(r_peri,Q_vv_norm,'linew',1.5,'color',0.5*[1 1 1]);
 plot(r_peri,Q_lv_norm,'linew',1.5,'color',0.5*[1 1 1]);
-text(0.9,1.05,'$q_{\rm lv}$','Interpreter','latex','FontSize',15);
-text(0.05,0.94,'$Q_{\rm lv}=\int q_{\rm lv}(r) r {\rm d}r$','Interpreter','latex','FontSize',15);
-text(0.9,0.95,'$q_{\rm vv}$','Interpreter','latex','FontSize',15);
-text(0.4,0.5,'$Q_{\rm vv}=\int q_{\rm vv}(r) r {\rm d}r$','Interpreter','latex','FontSize',15);
+text(0.9,1.05,'$q_{\ell}$','Interpreter','latex','FontSize',15);
+text(0.05,0.94,'$Q_{\ell}=\int q_{\ell}(r) r {\rm d}r$','Interpreter','latex','FontSize',15);
+text(0.9,0.95,'$q_v$','Interpreter','latex','FontSize',15);
+text(0.4,0.5,'$Q_v=\int q_v(r) r {\rm d}r$','Interpreter','latex','FontSize',15);
 
 nexttile;hold on;
 xlim([0 1])
@@ -109,7 +111,7 @@ set(gca,'FontSize',14,'TickLabelInterpreter','latex');
 ylabel({'proportion of';'luminal fluid *'},'Interpreter','latex')
 xlabel('r','Interpreter','latex')
 xticks([r_eel_norm r_apv_norm])
-xticklabels({'m-a';'a-pv'})
+xticklabels({'$r_{ia}$';'$r_{ap}$'})
 text(-0.15,1,labels{4},'Units','normalized','FontSize',13,'fontweight','bold','FontName','times');
 plot(r_peri,dil(id_eel:end),'linew',1.5,'color',0.5*[1 1 1]);
 line([r_norm(1) d_dil10_norm],[0.1 0.1],'lines','--','color','k');
@@ -147,7 +149,7 @@ set(gca,'FontSize',14,'TickLabelInterpreter','latex');
 ylabel({'solute';'concentration *'},'Interpreter','latex')
 xlabel('r','Interpreter','latex')
 xticks([r_eel_norm r_apv_norm])
-xticklabels({'m-a';'a-pv'})
+xticklabels({'$r_{ia}$';'$r_{ap}$'})
 text(-0.15,1,labels{5},'Units','normalized','FontSize',13,'fontweight','bold','FontName','times');
 plot(r_norm,c,'linew',1.5,'color',0.5*[1 1 1]);
 
@@ -158,7 +160,7 @@ ylabel({'solute';'gradient *'},'Interpreter','latex')
 yticks(0)
 xlabel('r','Interpreter','latex')
 xticks([r_eel_norm r_apv_norm])
-xticklabels({'m-a';'a-pv'})
+xticklabels({'$r_{ia}$';'$r_{ap}$'})
 text(-0.15,1,labels{6},'Units','normalized','FontSize',13,'fontweight','bold','FontName','times');
 plot(r_norm,dc_norm,'linew',1.5,'color',0.5*[1 1 1]);
 text(0.01,-0.07,'-0.4\%','Interpreter','latex','FontSize',15);

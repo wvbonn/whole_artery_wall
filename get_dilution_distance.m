@@ -1,11 +1,11 @@
-function [dil,d_dil10] = get_dilution_distance(v,q_vv,r,param)
+function [dil,d_dil10] = get_dilution_distance(u,q_v,r,param)
 
     % dilution coefficient of lumen-originating fluid
-    m_vv = q_vv*param.s*1e3; % mass flux from vv in µm/s
+    m_v = q_v*param.s*1e3; % mass flux from vv in µm/s
     dil(1) = 1;
     for i = 2:numel(r)
-        if m_vv(i) > 0 
-            dil(i) = dil(i-1)*v(i)/(v(i)+m_vv(i));
+        if m_v(i) > 0 
+            dil(i) = dil(i-1)*u(i)/(u(i)+m_v(i));
         else
             dil(i) = dil(i-1);
         end

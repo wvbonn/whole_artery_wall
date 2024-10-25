@@ -1,8 +1,8 @@
-function Q_vv_lv = get_vv_fraction_lymph(q_vv,q_lv,g)
+function Q_v_l = get_vv_fraction_lymph(q_v,q_l,g)
 
-    Q_vv = sum(q_vv.*g);
-    Q_lv = sum(q_lv.*g);
+    Q_v = sum(q_v.*g);
+    Q_l = sum(q_l.*g);
 
-    Q_vv_lv = Q_vv/Q_lv;
+    Q_v_l = Q_v/Q_l;
 
 end
