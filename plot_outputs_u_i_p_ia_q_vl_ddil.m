@@ -25,6 +25,8 @@ for i = 1:numel(varpar); A.t_p(i) = varpar(i).t_p; end
 A.r_ext = param_A.r_ia + param_A.t_a + [min(A.t_p) max(A.t_p)];
 
 
+return;
+
 figure('position',[50 0 1000 900],'color','w');
 tiledlayout(2,2);
 

@@ -8,7 +8,7 @@ k = strfind(currdir,'\');
 homepath = currdir(1:k(end));
 
 ATHERO = 1==1;
-EXPORT = 1==1;
+EXPORT = 1==0;
 labels = get_subplot_labels('a':'z',8);
 
 param = declare_fixed_parameters(ATHERO);
@@ -36,6 +36,7 @@ ylims.dc = [0 13];
 y_ticks = 0:2:10;
 ylims.t_dC = [-0.4 1.2];
 
+return;
 
 %% plot max. absolute gradients against non-dimensional numbers
 

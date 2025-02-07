@@ -29,7 +29,7 @@ for i = 1:numel(varpar)
     A.L(i) = varpar(i).n_l*1e6.*varpar(i).q_l; % mm^-2 * m^2/s = s^-1
 end
 
-
+return;
 %% plot
 figure('position',[50 50 800 800],'color','w');
 
