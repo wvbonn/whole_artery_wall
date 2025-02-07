@@ -1,8 +1,7 @@
 % radial model of interstitial fluid flow and solute transport in an
 % endothelium-to-PVAT arterial wall with distributed vasa vasorum and
-% lymphatic vessels 
+% lymphatic vessels. Here, the model parameters are prescribed.
 % author: Willy Bonneuil, Université de Rennes 
-% e-mail: willy.bonneuil@univ-rennes.fr
 
 clear
 close all
